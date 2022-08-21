@@ -8,15 +8,14 @@ public class Gun {
     Image gunStand, gunShot;
     JPanel game;
     int positionX = 0, positionY = 0;
-    int dx = 0, dy = 30;
+    int dx = 5, dy = 5;
     boolean shooting = false;
 
     public Gun(JPanel game, int n) {
         try {
             this.game = game;
-//            TODO: dinamizar para mais de um jogador
-            gunStand = ImageIO.read(new File("Screenshot_1.png"));
-            gunShot = ImageIO.read(new File("Screenshot_2.png"));
+            gunStand = ImageIO.read(new File("GunStand" + (n == 1 ? "A":"B") + ".png"));
+            gunShot = ImageIO.read(new File("GunShot" + (n == 1 ? "A":"B")  + ".png"));
         } catch (IOException e) {
             JOptionPane.showMessageDialog(game, "The image cannot be loaded.\n" + e, "ERROR", JOptionPane.ERROR_MESSAGE);
             System.exit(1);

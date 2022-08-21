@@ -37,9 +37,10 @@ public class Network {
         }
     }
 
-    public void fetchPosition(Position positionGunA, Position positionGunB) {
+    public void fetchPosition(Position positionGunA, Position positionGunB, Position posDuck) {
         try {
-//            TODO: implementar posicao do pato
+            posDuck.x = is.readInt();
+            posDuck.y = is.readInt();
             positionGunA.x = is.readInt();
             positionGunA.y = is.readInt();
             positionGunB.x = is.readInt();
@@ -67,6 +68,15 @@ public class Network {
         } catch (IOException e) {
             hasData = false;
             return "";
+        }
+    }
+
+    public void fetchScore(Score score) {
+        try {
+            score.pointsA = is.readInt();
+            score.pointsB = is.readInt();
+        } catch (IOException e) {
+            hasData = false;
         }
     }
 
