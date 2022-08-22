@@ -99,40 +99,57 @@ class GameArea extends JPanel {
             public void run() {
                 countdown(score);
                 gameRunning = true;
-                while(network.hasData()){
+                while(network.hasData()) {
                     String eventType = network.fetchEventType();
                     network.fetchPosition(posGunA, posGunB, posDuck);
-                    switch (eventType){
-                        case "MOVE":
-                            duck.shows(posDuck.x, posDuck.y);
-                            gunA.position(posGunA.x, posGunA.y);
-                            gunB.position(posGunB.x, posGunB.y);
-                            duck.duckHit(false);
-                            break;
-                        case "WINNER":
-                            network.fetchScore(score);
-                            game.updateScore("You WIN! ", score);
-                            break;
-                        case "LOSER":
-                            network.fetchScore(score);
-                            game.updateScore("You LOSE!", score);
-                        case "HIT SHOT":
-                            gunA.shoot();
-                            duck.duckHit(true);
-                            network.fetchScore(score);
-                            game.updateScore(score);
-                            break;
-                        case "OPPONENT HIT SHOT":
-                            gunB.shoot();
-                            duck.duckHit(true);
-                            network.fetchScore(score);
-                            game.updateScore(score);
-                        case "MISS":
-                            gunA.shoot();
-                            break;
-                        case "OPPONENT MISS":
-                            gunB.shoot();
-                            break;
+                    try {
+                        switch (eventType) {
+                            case "MOVE":
+                                duck.shows(posDuck.x, posDuck.y);
+                                gunA.position(posGunA.x, posGunA.y);
+                                gunB.position(posGunB.x, posGunB.y);
+                                duck.duckHit(false);
+                                break;
+                            case "WINNER":
+                                gunA.shoot();
+                                duck.duckHit(true);
+                                network.fetchScore(score);
+                                game.updateScore(score);
+                                game.updateScore("You WIN! ", score);
+                                sleep(3000);
+                                score = game.newScore();
+                                game.updateScore(score);
+                                break;
+                            case "LOSER":
+                                gunB.shoot();
+                                duck.duckHit(true);
+                                network.fetchScore(score);
+                                game.updateScore(score);
+                                game.updateScore("You LOSE!  ", score);
+                                sleep(3000);
+                                score = game.newScore();
+                                game.updateScore(score);
+                                break;
+                            case "HIT SHOT":
+                                gunA.shoot();
+                                duck.duckHit(true);
+                                network.fetchScore(score);
+                                game.updateScore(score);
+                                break;
+                            case "OPPONENT HIT SHOT":
+                                gunB.shoot();
+                                duck.duckHit(true);
+                                network.fetchScore(score);
+                                game.updateScore(score);
+                            case "MISS":
+                                gunA.shoot();
+                                break;
+                            case "OPPONENT MISS":
+                                gunB.shoot();
+                                break;
+                        }
+                    } catch (InterruptedException e) {
+
                     }
                     repaint();
                 }
@@ -170,6 +187,12 @@ public class DuckHunt extends JFrame {
     public Score score() {
         return score;
     }
+
+    public Score newScore(){
+        score = new Score(0,0);
+        return score;
+    }
+
 
     public static void main(String[] args) {
         new DuckHunt();
